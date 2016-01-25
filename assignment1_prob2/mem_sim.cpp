@@ -1,6 +1,8 @@
 #include <iostream>
 #include <list>
 #include <utility>
+#include <vector>
+#include <iterator>
 
 using namespace std;
 
@@ -24,66 +26,65 @@ int main()
     int memory_size = 0;
    
     //position of each page in memory
-    vector<int> position(N,-1); 
+    vector<bool> position(N,false); 
+    //last postion to insert from
+    int last_pos = 0;
+    
     while(M--)
     {
         cin>>K;
-        //if K is in memory
-        bool in_memory = false;
 
-        //search for K in memory
-        for(list <pair<int,int> >::iterator it = memory.begin(); it != memory.end(); ++it)
-        {
-            //hit
-            if(it -> first == K)
-            {
-                //update the bool since K is in memory
-                in_memory = true; 
-                //update number of hits
-                hit++;
-                //update the frequency
-                it->second++;
-                
-                
-                list < pair<int,int> >::iterator hit_it;
-                hit_it = it;
-                
-                while(it != memory.begin() && (it -> second <= hit_it -> second))
-                {
-                    it--;
-                }
-                it++;
-                memory.insert(it,*hit_it);
-                memory.erase(hit_it); 
-                break;
-            }
-        } 
-        
         //if not in memory
-        if(!in_memory)        
+        if(!position[K])        
         {
             miss++;
             if(memory_size < P)
             {
                 list < pair<int,int> >::iterator it = memory.end();
-                while(it != memory.begin() && it -> second == 1)
-                {
-                    it--;
-                }
+                advance(it,-last_pos);
                 memory.insert(it,make_pair(K,1));           
                 memory_size++;
+                position[K] = true;
             }
             else
             {
+                position[memory.back().first] = false;
                 memory.pop_back();    
                 list<pair<int,int> >::iterator it = memory.end();
-                while(it != memory.begin() && it -> second == 1)
-                {
-                    it--;
-                }
+                advance(it,-last_pos);
                 memory.insert(it,make_pair(K,1));           
+                position[K] = true;
             }
         } 
+        else
+        {
+            //search for K in memory
+            for(list <pair<int,int> >::iterator it = memory.begin(); it != memory.end(); ++it)
+            {
+                //hit
+                if(it -> first == K)
+                {
+                    //update number of hits
+                    hit++;
+                    //update the frequency
+                    it->second++;
+                    
+                    
+                    list < pair<int,int> >::iterator hit_it;
+                    hit_it = it;
+                    
+                    while(it != memory.begin() && (it -> second <= hit_it -> second))
+                    {
+                        it--;
+                    }
+                    it++;
+                    memory.insert(it,*hit_it);
+                    memory.erase(hit_it); 
+                    break;
+                }
+            } 
+
+        }
     }   
     cout<< hit<<endl;
     cout<< miss<<endl;
