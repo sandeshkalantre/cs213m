@@ -17,49 +17,71 @@ int main()
     int hit,miss;
     hit = 0;
     miss = 0;
-    
+   
+    //list of pairs (page ID, frequency) 
     list<pair<int,int> > memory;
+    //dynamic size of memory 
     int memory_size = 0;
+   
+    //position of each page in memory
+    vector<int> position(N,-1); 
     while(M--)
     {
         cin>>K;
-        //if K is not in memory
+        //if K is in memory
         bool in_memory = false;
-        for(list<pair<int,int> >::iterator it = memory.begin(); it != memory.end(); ++it)
+
+        //search for K in memory
+        for(list <pair<int,int> >::iterator it = memory.begin(); it != memory.end(); ++it)
         {
-            if(it->first == K)
+            //hit
+            if(it -> first == K)
             {
-                hit++;
-                it->second++;
-                list<pair<int,int> >::iterator tmp_it;
-                tmp_it = it;
-                if(it != memory.begin())
-                {
-                   it--;
-                   if(it->second <= tmp_it->second) 
-                   {
-                        pair<int,int> tmp_data = *it;
-                        *it = *tmp_it;
-                        *tmp_it = tmp_data;
-                   }
-                } 
+                //update the bool since K is in memory
                 in_memory = true; 
+                //update number of hits
+                hit++;
+                //update the frequency
+                it->second++;
+                
+                
+                list < pair<int,int> >::iterator hit_it;
+                hit_it = it;
+                
+                while(it != memory.begin() && (it -> second <= hit_it -> second))
+                {
+                    it--;
+                }
+                it++;
+                memory.insert(it,*hit_it);
+                memory.erase(hit_it); 
                 break;
             }
         } 
+        
         //if not in memory
         if(!in_memory)        
         {
             miss++;
             if(memory_size < P)
             {
-                memory.push_back(make_pair(K,1));           
+                list < pair<int,int> >::iterator it = memory.end();
+                while(it != memory.begin() && it -> second == 1)
+                {
+                    it--;
+                }
+                memory.insert(it,make_pair(K,1));           
                 memory_size++;
             }
             else
             {
                 memory.pop_back();    
-                memory.push_back(make_pair(K,1));           
+                list<pair<int,int> >::iterator it = memory.end();
+                while(it != memory.begin() && it -> second == 1)
+                {
+                    it--;
+                }
+                memory.insert(it,make_pair(K,1));           
             }
         } 
     }   
