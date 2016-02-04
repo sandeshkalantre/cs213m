@@ -3,28 +3,6 @@
 #include <stack>
 
 using namespace std;
-class operation
-{
-    public:
-        //operation type
-        char _type;
-        //operation data
-        //string in case of append
-        string _str;
-        //in case of get, erase
-        int _k;
-        operation();
-        add_data(char type, string str, int k);
-};
-operation::operation()
-{
-}
-operation::operation(char type, string str = "", int k = 0)
-{
-    _type = type;
-    _str = str;
-    _k = k;
-}
 
 int main()
 {
@@ -39,11 +17,14 @@ int main()
     string str;
 
     //operation stacks
-    stack<operation> undo;
-    stack<operation> redo;
+    stack<char> u_opr;
+    stack<string> u_opr_str;
+    stack<int> u_opr_num; 
+    stack<char> r_opr;
+    stack<string> r_opr_str;
+    stack<int> r_opr_num; 
     
     string tmp_str;
-    operation tmp_opr;
     while(Q--)
     {
         cin >> t;
@@ -53,7 +34,10 @@ int main()
             {
                 cin >> tmp_str;
                 str.append(tmp_str);
-                undo.push(tmp_opr.add_data('a',tmp_str,0));
+                u_opr.push('a');
+                u_opr_str.push(tmp_str);
+                r_opr = stack<char>();
+                r_opr_str = stack<string>();
                 break;
             }
             case 'e':
@@ -62,29 +46,67 @@ int main()
                 //CAN BE IMPROVED
                 int k;
                 cin >> k;
+                tmp_str = str.substr(str.size() - k,k); 
                 str.erase(str.size() - k, k);
-                undo.push(tmp_opr.add_data('e',"",k));
+                u_opr.push('e');
+                u_opr_str.push(tmp_str);
+                r_opr = stack<char>();
+                r_opr_str = stack<string>();
                 break;
             }
             case 'g':
             {
                 int k;
                 cin >> k;
-                cout<< str[k];
-                undo.push(tmp_opr.add_data('g',"",k));
+                cout<< str[k]<<endl;
+                cout<< str<<endl;
                 break;
             }
             case 'u':
             {
+                if(!u_opr.empty())
+                {
+                    if(u_opr.top() == 'e') 
+                    {
+                        r_opr.push('e');
+                        str.append(u_opr_str.top());
+                        r_opr_str.push(u_opr_str.top()); 
+                        u_opr_str.pop();
+                        u_opr.pop();
+                    }
+                    else if(u_opr.top() == 'a')
+                    {
+                        r_opr.push('a'); 
+                        str.erase(str.size() - u_opr_str.top().length(),u_opr_str.top().length());
+                        r_opr_str.push(u_opr_str.top()); 
+                        u_opr_str.pop();
+                        u_opr.pop();
+                    }
+                }
                 break;
             }
             case 'r':
             {
+                if(!r_opr.empty())
+                {
+                    if(r_opr.top() == 'e') 
+                    {
+                        str.append(r_opr_str.top());
+                        r_opr_str.pop();
+                        r_opr.pop();
+                    }
+                    else if(r_opr.top() == 'a')
+                    {
+                        str.erase(str.size() - r_opr_str.top().size(),r_opr_str.top().size());
+                        r_opr_str.pop();
+                        r_opr.pop();
+                    }
+                }
                 break;
             }
             case 'p':
             {
-                cout << str;
+                cout << str <<endl;
                 break;
             }
         }
