@@ -10,6 +10,7 @@ class queue_list {
 private:
   list<T> q;
   // Add more member variables if needed. Do not use STL queues.
+  int _size;
 
 public:
 	/**
