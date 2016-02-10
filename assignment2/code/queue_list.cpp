@@ -10,17 +10,16 @@ queue_list<T>::queue_list()
 template<class T>
 queue_list<T>::queue_list(const queue_list &to_copy_to)
 {
-    T* it;
-    //queue empty
-    _size = 0;
-    if(to_copy_to.front(it) > 0)
-    {
-        for(int i = 0;i < to_copy_to.size(); i++)
-        {
-            q.push_back(*(it + i));
-            _size++;
-        }
-    }
+    _size = to_copy_to._size;
+    q = to_copy_to.q;  
+    //if(to_copy_to.front(it) > 0)
+    //{
+    //    for(int i = 0;i < to_copy_to.size(); i++)
+    //    {
+    //        q.push_back(*(it + i));
+    //        _size++;
+    //    }
+    //}
 }
 
 template<class T>
@@ -46,7 +45,7 @@ int queue_list<T>::front(T *top_element)
     }
     else
     {
-        top_element =  &q.front();
+        *top_element =  q.front();
         return 1;
     }
 }
@@ -61,6 +60,7 @@ void queue_list<T>::pop_front()
     else
     {
         q.pop_front();
+        _size -= 1;
         return;
     }
 }

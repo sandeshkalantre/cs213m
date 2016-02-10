@@ -16,17 +16,6 @@ stack<T>::stack(const stack &to_copy_to)
     _top_pos = -1;
 
     _stack = to_copy_to._stack;
-    //if stack non-empty
-    //if(to_copy_to.top(top_ele) > 0)
-    //{
-    //    //use a loop to copy elements one by one
-    //    for(int i = to_copy_to.size(); i > 0 ; i--)
-    //    {
-    //        *(_stack + i - 1) = *top_ele; 
-    //        top_ele -= 1;
-    //    }
-    //    _top_pos = to_copy_to.size() - 1;
-    //}
 }
 
 template <class T>

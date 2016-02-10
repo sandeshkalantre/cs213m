@@ -46,8 +46,8 @@ int main()
                 //CAN BE IMPROVED
                 int k;
                 cin >> k;
-                tmp_str = str.substr(str.size() - k,k); 
-                str.erase(str.size() - k, k);
+                tmp_str = str.substr(str.length() - k,k); 
+                str.erase(str.length() - k, k);
                 u_opr.push('e');
                 u_opr_str.push(tmp_str);
                 r_opr = stack<char>();
@@ -59,7 +59,6 @@ int main()
                 int k;
                 cin >> k;
                 cout<< str[k]<<endl;
-                cout<< str<<endl;
                 break;
             }
             case 'u':
@@ -77,7 +76,7 @@ int main()
                     else if(u_opr.top() == 'a')
                     {
                         r_opr.push('a'); 
-                        str.erase(str.size() - u_opr_str.top().length(),u_opr_str.top().length());
+                        str.erase(str.length() - u_opr_str.top().length(),u_opr_str.top().length());
                         r_opr_str.push(u_opr_str.top()); 
                         u_opr_str.pop();
                         u_opr.pop();
@@ -91,13 +90,17 @@ int main()
                 {
                     if(r_opr.top() == 'e') 
                     {
-                        str.append(r_opr_str.top());
+                        str.erase(str.length() - r_opr_str.top().length(),r_opr_str.top().length());
+                        u_opr.push('e');
+                        u_opr_str.push(r_opr_str.top());
                         r_opr_str.pop();
                         r_opr.pop();
                     }
                     else if(r_opr.top() == 'a')
                     {
-                        str.erase(str.size() - r_opr_str.top().size(),r_opr_str.top().size());
+                        str.append(r_opr_str.top());
+                        u_opr.push('a');
+                        u_opr_str.push(r_opr_str.top());
                         r_opr_str.pop();
                         r_opr.pop();
                     }
@@ -110,6 +113,7 @@ int main()
                 break;
             }
         }
+        //cout<< str << endl;
     }
     return 0;
 }
