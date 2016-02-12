@@ -18,18 +18,23 @@ int main()
     int uniq = 0;
 
     MFile my_file;
-    my_file.init(inp_filename, num_char_line); 
+    if(my_file.init(inp_filename, num_char_line) == -1)
+    {
+        cout << "File failed to open" << endl;
+        return -1;
+    } 
 
     //hash table
-    unordered_map< string, int> hash;
+    unordered_map< int, int> hash;
     string tmp;
+    std::hash<string> str_hash;
     while((tmp = my_file.readNext()) != "")
     {
        //new line in the file
-       if(hash.find(tmp) == hash.end())
+       if(hash.find(str_hash(tmp)) == hash.end())
        { 
            uniq++;
-           pair<string,int> tmp_ele(tmp,0); 
+           pair<int,int> tmp_ele(str_hash(tmp),0); 
            hash.insert(tmp_ele);
        }
     }
