@@ -45,8 +45,5 @@ int main () {
         heap->deleteElems(obj);
       }
     }
-  cout << endl <<"Heap" << endl;
-  heap->print();
-  cout << endl << "Fin" << endl;
   }
 }
