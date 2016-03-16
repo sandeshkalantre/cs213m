@@ -136,7 +136,7 @@ int main()
     int t = 0;
     event ev = event_heap.getMin();
     t = ev.time;
-    while(t < T)
+    while(t <= T)
     {
         //cout << "Time" << t << endl;
         event_heap.deleteMin();
@@ -202,7 +202,7 @@ int main()
             final_pop++;
         }
     }
-    cout << final_pop;
+    cout << final_pop << endl;
              
 
 
