@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "minMaxHeap.hpp"
 
 class microbe
@@ -97,12 +98,53 @@ class Pred: public Predicate<event> {
   }
 };
 
+class event_out
+{
+    public:
+        char type;
+        int time;
+        int id;
+        event_out(char ty,int t,int t_id)
+        {
+            type = ty;
+            time = t;
+            id = t_id;
+        }
+
+        bool operator<(event_out& ev)
+        {
+            if(this -> time < ev.time)
+            {
+                true;
+            }
+            else if(this -> time == ev.time)
+            {
+                if(this -> id < ev.id)
+                {
+                   return true;
+                }
+                else
+                {
+                   return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+};
+
+                
+
+
 
 int main()
 {
     int N;
     cin >> N;
     vector<microbe> microbe_vector;
+    vector<event_out> output;
     MinMaxHeap<event> event_heap;
     for(int i = 0;i < N;i++)
     {
@@ -147,7 +189,9 @@ int main()
             microbe_vector[ev.mic_id].is_dead = true;
             Pred obj(ev.mic_id);
             event_heap.deleteElems(obj);
-            cout << "d " << ev.mic_id << " " << t << endl;
+            event_out tmp_out('d',t,ev.mic_id);
+            output.push_back(tmp_out);
+            //cout << "d " << ev.mic_id << " " << t << endl;
         }
         else if(ev.type == 1)
         {
@@ -188,12 +232,25 @@ int main()
             event tmp_ev(microbe_vector[new_id].n + t,2,new_id);
             event_heap.insert(tmp_ev);
             
-            cout << "b " << new_id << " " << t << endl;
+            event_out tmp_out('b',t,new_id);
+            output.push_back(tmp_out);
+            
+            //cout << "b " << new_id << " " << t << endl;
         }
         ev = event_heap.getMin();
         t = ev.time;
 
     }
+    //print the output
+    //there was a small subtelty in prinitng the output
+    //For the same time, do you report a death event first or a birth event
+    //Hence the sort thing was introduced to match the test output
+    sort(output.begin(),output.end());
+    for(int i = 0;i < output.size();i++)
+    {
+        cout << output[i].type << " " <<output[i].id << " " << output[i].time << endl;
+    }
+
     int final_pop = 0;
     for(int i = 0;i < microbe_vector.size();i++)
     {
