@@ -2,7 +2,7 @@
 #include <set>
 #include <vector>
 #include <string>
-#include "A-star.hpp"
+#include "A_star.hpp"
 
 using namespace std;
 
