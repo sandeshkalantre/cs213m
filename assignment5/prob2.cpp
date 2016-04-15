@@ -49,6 +49,17 @@ class node
                 return false;
             }
         }
+        bool operator!=(const node& n) const
+        {
+            if(state == n.state)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         //utility swap
         vector<int> swap_ele(int i,int j,vector<int> state) const
         {
